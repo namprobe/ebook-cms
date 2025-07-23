@@ -77,12 +77,8 @@ export default function SubscriptionManagementModal({
         return "Gia hạn subscription hiện tại"
       case 'cancel':
         return "Hủy subscription hiện tại"
-      case 'gift':
-        return "Tặng subscription mới cho user"
       case 'toggle_auto_renew':
         return "Bật/tắt tự động gia hạn"
-      case 're_subscription':
-        return "Kích hoạt lại subscription với bằng chứng thanh toán"
       default:
         return ""
     }
@@ -123,12 +119,12 @@ export default function SubscriptionManagementModal({
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Gói:</span>
-                  <span className="font-medium">{userDetail.subscription.subscription.name}</span>
+                  <span className="font-medium">{userDetail.subscription.subscription_name}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Trạng thái:</span>
-                  <Badge variant={userDetail.subscription.is_active ? "default" : "destructive"}>
-                    {userDetail.subscription.is_active ? "Đang hoạt động" : "Hết hạn"}
+                  <Badge variant={userDetail.subscription.status === 1 ? "default" : "destructive"}>
+                    {userDetail.subscription.status === 1 ? "Đang hoạt động" : "Hết hạn"}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
@@ -198,18 +194,6 @@ export default function SubscriptionManagementModal({
                       </SelectItem>
                     </>
                   )}
-                  <SelectItem value="gift">
-                    <div className="flex items-center gap-2">
-                      <Gift className="h-4 w-4" />
-                      <span>Tặng Premium</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="re_subscription">
-                    <div className="flex items-center gap-2">
-                      <Crown className="h-4 w-4" />
-                      <span>Re-subscription</span>
-                    </div>
-                  </SelectItem>
                 </SelectContent>
               </Select>
               {selectedAction && (
@@ -219,8 +203,8 @@ export default function SubscriptionManagementModal({
               )}
             </div>
 
-            {/* Duration Input (for extend/gift/re_subscription actions) */}
-            {(selectedAction === 'extend' || selectedAction === 'gift' || selectedAction === 're_subscription') && (
+            {/* Duration Input (for extend action only) */}
+            {selectedAction === 'extend' && (
               <div>
                 <Label htmlFor="duration">Số ngày</Label>
                 <Input
@@ -233,23 +217,7 @@ export default function SubscriptionManagementModal({
                   max="365"
                 />
                 <p className="text-sm text-muted-foreground mt-1">
-                  {selectedAction === 'extend' ? 'Gia hạn thêm' : selectedAction === 're_subscription' ? 'Kích hoạt lại' : 'Tặng'} {durationDays} ngày {selectedAction === 'extend' ? 'cho subscription hiện tại' : 'subscription'}
-                </p>
-              </div>
-            )}
-
-            {/* Payment Proof URL (for re_subscription action) */}
-            {selectedAction === 're_subscription' && (
-              <div>
-                <Label htmlFor="paymentProof">Bằng chứng thanh toán *</Label>
-                <Input
-                  id="paymentProof"
-                  type="url"
-                  placeholder="https://example.com/payment-proof.jpg"
-                  required
-                />
-                <p className="text-sm text-muted-foreground mt-1">
-                  URL hình ảnh bằng chứng thanh toán từ khách hàng
+                  Gia hạn thêm {durationDays} ngày cho subscription hiện tại
                 </p>
               </div>
             )}

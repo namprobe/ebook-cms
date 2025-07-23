@@ -65,14 +65,14 @@ export default function PaymentHistoryModal({
 
   const getPaymentStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'completed':
       case 'success':
         return <Badge variant="default" className="gap-1"><CheckCircle className="h-3 w-3" /> Thành công</Badge>
       case 'failed':
-      case 'error':
         return <Badge variant="destructive" className="gap-1"><XCircle className="h-3 w-3" /> Thất bại</Badge>
       case 'pending':
         return <Badge variant="secondary" className="gap-1"><Clock className="h-3 w-3" /> Đang xử lý</Badge>
+      case 'cancelled':
+        return <Badge variant="outline" className="gap-1"><XCircle className="h-3 w-3" /> Đã hủy</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }

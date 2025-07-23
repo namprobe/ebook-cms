@@ -27,34 +27,32 @@ export interface UserDetail extends User {
   avatar_url?: string
   subscription?: {
     id: string
+    user_id: string
     subscription_id: string
-    subscription: {
-      id: string
-      name: string
-      description: string
-      price: number
-      duration_days: number
-      features: string[]
-    }
+    subscription_name: string
     start_date: string
     end_date: string
-    is_active: boolean
     auto_renew: boolean
+    status: number
+    status_text: string
+    created_at: string
   }
   has_active_subscription: boolean
-  subscription_history?: UserSubscriptionHistory[]
-  payment_history?: PaymentHistory[]
 }
 
 export interface UserSubscriptionHistory {
   id: string
   subscription_name: string
+  subscription_description: string
   start_date: string
   end_date: string
-  is_active: boolean
   auto_renew: boolean
   price: number
-  status: string
+  duration_days: number
+  status: number // EntityStatus enum
+  status_string: string
+  created_at: string
+  modified_at?: string
 }
 
 export interface PaymentHistory {
@@ -66,16 +64,17 @@ export interface PaymentHistory {
   transaction_id?: string
   description?: string
   currency: string
+  subscription_name?: string
+  subscription_duration?: number
+  created_at: string
+  modified_at?: string
 }
 
 export interface SubscriptionManagementRequest {
-  action: 'extend' | 'cancel' | 'gift' | 'toggle_auto_renew' | 're_subscription'
+  action: 'extend' | 'cancel' | 'toggle_auto_renew'
   subscription_id?: string
   duration_days?: number
   reason?: string
-  payment_proof_url?: string
-  payment_method?: string
-  payment_amount?: number
   auto_renew?: boolean
 }
 

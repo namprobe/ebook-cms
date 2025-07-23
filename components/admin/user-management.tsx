@@ -499,10 +499,6 @@ export default function UserManagement() {
                           <Eye className="mr-2 h-4 w-4" />
                           Xem chi tiết
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Crown className="mr-2 h-4 w-4" />
-                          Re-subscription
-                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => handleToggleUserStatus(user)}>
                           {user.is_active ? (
@@ -632,23 +628,15 @@ export default function UserManagement() {
                           <div className="flex items-center space-x-2">
                             <Crown className="h-5 w-5 text-yellow-600" />
                             <span className="font-semibold text-yellow-800 dark:text-yellow-200">
-                              {selectedUserDetail.subscription.subscription.name}
+                              {selectedUserDetail.subscription.subscription_name}
                             </span>
                           </div>
-                          <Badge variant={selectedUserDetail.subscription.is_active ? "default" : "destructive"}>
-                            {selectedUserDetail.subscription.is_active ? "Đang hoạt động" : "Hết hạn"}
+                          <Badge variant={selectedUserDetail.subscription.status === 1 ? "default" : "destructive"}>
+                            {selectedUserDetail.subscription.status === 1 ? "Đang hoạt động" : "Hết hạn"}
                           </Badge>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">Giá:</span>
-                            <p className="font-medium">{selectedUserDetail.subscription.subscription.price.toLocaleString()} VND</p>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Thời hạn:</span>
-                            <p className="font-medium">{selectedUserDetail.subscription.subscription.duration_days} ngày</p>
-                          </div>
                           <div>
                             <span className="text-muted-foreground">Ngày bắt đầu:</span>
                             <p className="font-medium">{formatDate(selectedUserDetail.subscription.start_date)}</p>
@@ -666,43 +654,26 @@ export default function UserManagement() {
                             </p>
                           </div>
                           <div>
+                            <span className="text-muted-foreground">Trạng thái:</span>
+                            <p className="font-medium">
+                              <Badge variant={selectedUserDetail.subscription.status === 1 ? "default" : "secondary"}>
+                                {selectedUserDetail.subscription.status_text}
+                              </Badge>
+                            </p>
+                          </div>
+                          <div>
                             <span className="text-muted-foreground">Còn lại:</span>
                             <p className="font-medium">
                               {Math.max(0, Math.ceil((new Date(selectedUserDetail.subscription.end_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))} ngày
                             </p>
                           </div>
                         </div>
-
-                        {/* Features */}
-                        {selectedUserDetail.subscription.subscription.features && selectedUserDetail.subscription.subscription.features.length > 0 && (
-                          <div className="mt-3 pt-3 border-t border-yellow-200 dark:border-yellow-700">
-                            <span className="text-sm text-muted-foreground">Tính năng:</span>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              {selectedUserDetail.subscription.subscription.features.map((feature, index) => (
-                                <Badge key={index} variant="outline" className="text-xs">
-                                  {feature}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Description */}
-                        {selectedUserDetail.subscription.subscription.description && (
-                          <div className="mt-3 pt-3 border-t border-yellow-200 dark:border-yellow-700">
-                            <span className="text-sm text-muted-foreground">Mô tả:</span>
-                            <p className="text-sm mt-1">{selectedUserDetail.subscription.subscription.description}</p>
-                          </div>
-                        )}
                       </div>
                     </div>
                   ) : (
                     <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 text-center">
                       <Crown className="h-8 w-8 text-gray-400 mx-auto mb-2" />
                       <p className="text-muted-foreground text-sm">Người dùng chưa có gói Premium</p>
-                      <Button size="sm" variant="outline" className="mt-2" onClick={handleOpenSubscriptionModal}>
-                        Tặng Premium
-                      </Button>
                     </div>
                   )}
                 </div>
